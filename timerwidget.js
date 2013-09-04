@@ -9,8 +9,8 @@ var timerWidget = (function () {
         _toGo = 0,
         _time = 0,
         _interval = null,
-        _state = 0;
-
+        _state = 0,
+        _endTime = NaN;
 
     var toggle = function () {
         _state = (_state+1)%2;
@@ -22,7 +22,7 @@ var timerWidget = (function () {
     };
 
     var setTime = function (val) {
-        _toGo = val;
+        _toGo = val*1000;
         _time = _toGo;
         _showProgress(_toGo);
     };
@@ -53,8 +53,8 @@ var timerWidget = (function () {
     };
 
     var _formatTime = function (val) {
-        var s = val%60,
-            m = Math.floor(val/60),
+        var s = Math.round(val/1000)%60,
+            m = Math.floor(val/60000),
             r = "";
 
         if (m>99) {
@@ -80,7 +80,7 @@ var timerWidget = (function () {
     };
 
     var _tick = function () {
-        _toGo -= 1;
+        _toGo = _endTime - Date.now();
         if(_toGo>0) {
             _showProgress(_toGo);
         } else {
@@ -101,9 +101,12 @@ var timerWidget = (function () {
             clearInterval(_interval);
         }
         _interval = setInterval(_tick, 1000);
+        _endTime = Date.now() + _toGo;
+        _tick();
     };
 
     var _pause = function () {
+        _toGo = _endTime - Date.now();
         if(!_interval) {
             return;
         }
