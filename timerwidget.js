@@ -11,7 +11,35 @@ var timerWidget = (function () {
         _interval = null,
         _state = 0;
 
-    var setProgress = function () {
+
+    var toggle = function () {
+        _state = (_state+1)%2;
+        if(_state) {
+            _start();
+        } else {
+            _pause();
+        };
+    };
+
+    var setTime = function (val) {
+        _toGo = val;
+        _time = _toGo;
+        _showProgress(_toGo);
+    };
+
+    var setColor = function (val) {
+        _ctx.strokeStyle = val;
+        _ctx.font = "bold " + 0.4*_r+"px sans";
+
+        _ctx.textBaseline = "middle";
+        _ctx.textAlign = "center";
+    };
+
+    var setWidth = function (val) {
+        _ctx.lineWidth = val;
+    };
+
+    var _showProgress = function () {
         var end,
             percent = 100*_toGo/_time,
             end = START + percent*2*Math.PI/100;
@@ -36,19 +64,13 @@ var timerWidget = (function () {
         } else {
             r="0"+m;
         }
-       
+
         r+=":";
         if (s<10) {
             r+="0";
         }
 
         return r+=s;
-    };
-
-    var setTime = function (val) {
-        _toGo = val;
-        _time = _toGo;
-        setProgress(_toGo);
     };
 
     var _end = function () {
@@ -60,28 +82,20 @@ var timerWidget = (function () {
     var _tick = function () {
         _toGo -= 1;
         if(_toGo>0) {
-            setProgress(_toGo);
+            _showProgress(_toGo);
         } else {
             _end();
         }
     };
 
-    var setColor = function (val) {
-        _ctx.strokeStyle = val;
-        _ctx.font = "bold " + 0.4*_r+"px sans";
-
-        _ctx.textBaseline = "middle";
-        _ctx.textAlign = "center";
-    };
-
-    var setWidth = function (val) {
-        _ctx.lineWidth = val;
-    };
-
     var _click = function (e) {
         var x = e.pageX;
         var y = e.pageY;
+        console.log(x, y);
+
+        toggle();
     };
+
     var _start = function () {
         if(_interval) {
             clearInterval(_interval);
@@ -90,19 +104,12 @@ var timerWidget = (function () {
     };
 
     var _pause = function () {
-        if(_interval) {
-            clearInterval(_interval);
-            _interval = null;
+        if(!_interval) {
+            return;
         }
-    };
 
-    var toggle = function () {
-        _state = (_state+1)%2;    
-        if(_state) {
-            _start();
-        } else {
-            _pause();
-        };
+        clearInterval(_interval);
+        _interval = null;
     };
 
     var _init = function (c) {
@@ -112,9 +119,9 @@ var timerWidget = (function () {
         _ctx = _canva.getContext("2d");
         _r = Math.min(_w, _h)*0.4
 
-        setWidth(_r/6);
-        _ctx.strokeStyle = "#000";
         _canva.addEventListener("click", _click);
+        setWidth(_r/6);
+        setColor('#a22');
     };
 
     return function (c) {
@@ -125,5 +132,5 @@ var timerWidget = (function () {
             'toggle' : toggle,
             'setTime': setTime
         };
-    };   
+    };
 })();
