@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+</head>
+
+<body>
+<canvas width="300" height="225" id="a"></canvas>
+<script src="timerwidget.js"></script>
+<script>
+var t;
+
+document.addEventListener("DOMContentLoaded", function() {
+    var canv = document.getElementById('a');
+    t = timerWidget(canv);
+    t.setColor('#a22');
+    t.setTime(100*60);
+});
+</script>
+</body>
+</html>
