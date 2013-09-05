@@ -115,7 +115,7 @@ var timerWidget = (function () {
     var _in = function (n, x, y) {
         return x>_buttons[n][0] && x<_buttons[n][0]+_buttons[n][2] &&
                y>_buttons[n][1] && y<_buttons[n][1]+_buttons[n][3];
-         
+
     };
 
     var _click = function (e) {
@@ -170,25 +170,23 @@ var timerWidget = (function () {
     };
 
     var _calcButtons = function (size) {
-        _buttons['mPlus']=[
-            _w/2 - _r/3 - size/2,
-            _h/2 - _r/2 - size/2,
-            size, size];
+        var coords = {
+            'mPlus':  [-1/3, -0.5],
+            'mMinus': [-1/3, +0.5],
+            'sPlus':  [+1/3, -0.5],
+            'sMinus': [+1/3, +0.5]
+        }, c;
 
-        _buttons['mMinus']=[
-            _w/2 - _r/3 - size/2,
-            _h/2 + _r/2 - size/2,
-            size, size];
-
-        _buttons['sPlus']=[
-            _w/2 + _r/3 - size/2,
-            _h/2 - _r/2 - size/2,
-            size, size];
-
-        _buttons['sMinus']=[
-            _w/2 + _r/3 - size/2,
-            _h/2 + _r/2 - size/2,
-            size, size];
+        for (c in coords) {
+            if (!coords.hasOwnProperty(c)) {
+                continue;
+            }
+            _buttons[c] = [
+                _w/2 - size/2 + coords[c][0]*_r,
+                _h/2 - size/2 + coords[c][1]*_r,
+                size, size
+            ];
+        }
     };
 
     var _init = function (c) {
