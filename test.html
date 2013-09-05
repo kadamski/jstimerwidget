@@ -9,11 +9,14 @@
 <script src="timerwidget.js"></script>
 <script>
 var t;
-
+var finished = function () {
+    alert("END");
+};
 document.addEventListener("DOMContentLoaded", function() {
     var canv = document.getElementById('a');
+    canv.addEventListener("finished", finished);
     t = timerWidget(canv);
-    t.setTime(100*60);
+    t.setTime(1*60);
 });
 </script>
 </body>

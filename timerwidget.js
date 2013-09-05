@@ -98,7 +98,7 @@ var timerWidget = (function () {
     var _end = function () {
         _showProgress();
         _pause();
-        alert("END!");
+        _canva.dispatchEvent(new Event('finished'));
         setTime(Math.round(_time/1000));
     };
 
