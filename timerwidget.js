@@ -119,8 +119,8 @@ var timerWidget = (function () {
     };
 
     var _click = function (e) {
-        var x = e.pageX,
-            y = e.pageY,
+        var x = e.pageX - _canva.offsetLeft,
+            y = e.pageY - _canva.offsetTop,
             n = 0;
 
         if (_interval) {
