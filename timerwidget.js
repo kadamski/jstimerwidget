@@ -50,6 +50,30 @@ var timerWidget = (function () {
         _ctx.lineWidth = val;
     };
 
+    var _drawTriangle = function (c, dir) {
+        var x0 = c[0],
+            x1 = c[0]+c[2]/2,
+            x2 = c[0]+c[2],
+            y0 = c[1],
+            y1 = c[1]+c[3],
+            tmp, savedStyle;
+
+        _ctx.beginPath();
+        savedStyle = _ctx.fillStyle;
+        _ctx.fillStyle = '#777';
+        if(dir<0) { // down
+            tmp = y1;
+            y1 = y0;
+            y0 = tmp;
+        }
+        _ctx.moveTo(x0, y1);
+        _ctx.lineTo(x2, y1);
+        _ctx.lineTo(x1, y0);
+        _ctx.lineTo(x0, y1);
+        _ctx.fill();
+        _ctx.fillStyle = savedStyle;
+    };
+
     var _showProgress = function () {
         var end,
             percent = 100*_toGo/_time,
@@ -66,12 +90,10 @@ var timerWidget = (function () {
 
         _ctx.fillText(_formatTime(_toGo), _w/2, _h/2);
 
-        for(var r in _buttons) {
-            if(!_buttons.hasOwnProperty(r)) {
-                continue;
-            }
-            _ctx.fillRect.apply(_ctx, _buttons[r]);
-        }
+        _drawTriangle(_buttons['mPlus'], 1);
+        _drawTriangle(_buttons['sPlus'], 1);
+        _drawTriangle(_buttons['mMinus'], -1);
+        _drawTriangle(_buttons['sMinus'], -1);
     };
 
     var _formatTime = function (val) {
