@@ -97,8 +97,9 @@ var timerWidget = (function () {
     };
 
     var _formatTime = function (val) {
-        var s = Math.round(val/1000)%60,
-            m = Math.floor(val/60000),
+        var conv = Math.round(val/1000),
+            s = conv%60,
+            m = Math.floor(conv/60),
             r = "";
 
         if (m>999) {
