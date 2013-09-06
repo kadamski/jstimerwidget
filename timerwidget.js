@@ -212,19 +212,28 @@ var timerWidget = (function () {
         }
     };
 
-    var _init = function (c) {
-        _canva = c;
+    var _recalc = function () {
         _w = _canva.width;
         _h = _canva.height;
-        _ctx = _canva.getContext("2d");
-        _ctx.textBaseline = "middle";
         _r = Math.min(_w, _h)*0.4
-
         _calcButtons(_r*2/5);
-
-        _canva.addEventListener("click", _click);
         setWidth(_r/6);
         setColor('#a22');
+    };
+
+    var _init = function (c) {
+        _canva = c;
+        _ctx = _canva.getContext("2d");
+        _ctx.textBaseline = "middle";
+
+        _recalc();
+
+        _canva.addEventListener("click", _click);
+    };
+
+    var redraw = function () {
+        _recalc();
+        _showProgress();
     };
 
     return function (c) {
@@ -233,7 +242,8 @@ var timerWidget = (function () {
             'setColor': setColor,
             'setWidth': setWidth,
             'toggle' : toggle,
-            'setTime': setTime
+            'setTime': setTime,
+            'redraw': redraw
         };
     };
 })();

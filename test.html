@@ -2,22 +2,31 @@
 <html>
 <head>
     <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width">
 </head>
 
 <body>
 <canvas width="300" height="225" id="a"></canvas>
 <script src="timerwidget.js"></script>
 <script>
-var t;
+var t, canv;
 var finished = function () {
     alert("END");
 };
+var resize = function () {
+    canv.width = window.innerWidth;
+    canv.height = window.innerHeight;
+    t.redraw();
+};
 document.addEventListener("DOMContentLoaded", function() {
-    var canv = document.getElementById('a');
+    canv = document.getElementById('a');
     canv.addEventListener("finished", finished);
     t = timerWidget(canv);
     t.setTime(1*60);
+    resize();
 });
+window.addEventListener("resize", resize);
+
 </script>
 </body>
 </html>
